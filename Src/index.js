@@ -27,6 +27,7 @@
 
 import connectDB from "./DB/Index.js";
 import dotenv from "dotenv";
+import { app } from "./app.js";
 
 dotenv.config({path:"./env"})
 
@@ -38,7 +39,7 @@ connectDB()
     });
     
     app.listen(process.env.PORT ||8000,()=>{
-        console.log("server is running !!")
+        console.log("server is running !! on port 8000")
     } )
 })
 .catch((err)=>{
