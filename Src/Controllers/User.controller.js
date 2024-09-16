@@ -18,7 +18,7 @@ const userregister = asyncHandeler(async (req , res)=>{
 
   const {username,email,fulname,password}=  req.body
 
-  console.log("email:",email);
+  // console.log("email:",email);
 
   // if (fulname ===""){
   //  throw new apiError(400 ," fulname is required") 
@@ -41,7 +41,11 @@ const userregister = asyncHandeler(async (req , res)=>{
 
 
  const  avtarlocalPath = req.files?. avtar[0]?.path;
- const coverimglocalPath = req.files?. avtar[0]?.path;
+//  const coverimglocalPath = req.files?. avtar[0]?.path;
+let coverimglocalpath;
+if(req.files &&Array.isArray(req.files.coverimg)&&req.files.coverimg.length>0){
+ coverimglocalpath = req.files.coverimg[0].path
+}
 
 
  if(!avtarlocalPath){
