@@ -13,8 +13,8 @@ app.use(cors({
   app.use(express.static("public"))
   app.use(cookieParser())
   
-  import Router from "./Routes/User.route.js";
+  import router from "./Routes/User.route.js"
 
   //   route decleration 
-  app.use("/api/v1/users",Router)
+  app.use("/api/v1/users",router)
 export {app}

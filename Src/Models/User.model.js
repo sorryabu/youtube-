@@ -5,7 +5,7 @@ import bcrypt from "bcrypt"
 const UserSchema = new Schema(
     {
   username:{
-     type:string,
+    type:String,
      required: true,
      unique:true,
      lowercase:true,
@@ -13,24 +13,24 @@ const UserSchema = new Schema(
      index: true
   },
   email:{
-    type:string,
+    type:String,
      required: true,
      unique:true,
      lowercase:true,
      trim:true,
   },
   fulname:{
-    type:string,
+    type:String,
      required: true,
      trim:true,
   },
   avtar:{
-    type:string, // cloundanry url
+    type:String, // cloundanry url
      required: true,
     
   },
  coverimg:{
-     type:string,
+  type:String,
   },
   watchHistory:[
     {
@@ -39,11 +39,11 @@ const UserSchema = new Schema(
   }
 ],
 password:{
-     type: string ,
+  type:String,
      required: true
 },
 refresshToken:{
-  type : string ,
+  type:String,
 }    
 },
 {
@@ -53,7 +53,7 @@ refresshToken:{
  
 UserSchema.pre("save",async function(next){
     if(!this.isModified("password")) return next();
-    this.password=bcrypt.hash(this.password,10)
+    this.password= await bcrypt.hash(this.password,10)
     next()
 })
 UserSchema.methods.isPasswordCorrect = async function (password) {
@@ -86,4 +86,4 @@ UserSchema.methods.GenerateRefreshToken= function(){
     )
 }
 
-export  const User = mongoose.model.Schema|("User",UserSchema)
+export  const User = mongoose.model("User",UserSchema)
