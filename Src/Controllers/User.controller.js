@@ -229,9 +229,118 @@ try {
 }
 })
 
+
+const  changeCurrentPassword = asyncHandeler(async(req,res)=>{
+  const {oldPassword,newPassword}= req.body
+
+    const user = await User.findById(req.user?._id)
+   const isPasswordCorrect= await  user.isPasswordCorrect(oldPassword)
+   if(!isPasswordCorrect){
+    throw new apiError(401," invalid oldpassword error")
+   }
+
+user.password =newPassword
+  await user.save({validateBeforeSave:false})
+
+   return res
+   .status(200)
+   .json(new apiResponse(200,{},"password change successfully"))
+})
+
+
+const getCurrentUser=asyncHandeler(async(req,res)=>{
+  return res
+  .status(200)
+  .json( new apiResponse( 200,req.user,"current user fetch successfully"))
+})
+
+const UpdatedAccount=asyncHandeler(async(req,res)=>{
+ 
+  const {fulname,email,}=req.body
+       if(!(fulname ||email)){
+        throw new apiError(400,"all field is required")
+       }
+   const user = User.findById(
+  req.user?._id,
+  {
+    $set:{
+      fulname,
+      email
+    }
+  },
+  {new:true}
+).select("-password")
+
+  return res
+  .status(200)
+  .json( new apiResponse( 200,user,"avtar img successfully"))
+})
+
+const Updateavtar=asyncHandeler(async(req,res)=>{
+
+  const avtarlocalpath = req.file?.path
+  
+   if(!avtarlocalpath){
+    throw new apiError(400,"avtar file is misssing")
+   }
+   const avtar=   await  uplodOnCludinary(avtarlocalpath)
+  if(!avtar.url){
+    throw new apiError(400,"avtar while uploding on avtar file")
+  }
+
+await User.findByIdAndUpdate(
+  req.user?._id,
+  {
+    $set:{
+     avtar:avtar.url
+    }
+  },
+  {new:true}
+).select("-password")
+
+return res
+.status(200)
+.json( new apiResponse( 200,user,"accound upted successfully"))
+
+})
+
+const Updatecoverimg = asyncHandeler(async(req,res)=>{
+
+  const coverimglocalpath = req.file?.path
+  
+   if(!coverimglocalpath){
+    throw new apiError(400,"avtar file is misssing")
+   }
+   const coverimg=   await  uplodOnCludinary(coverimglocalpath)
+  if(!coverimg.url){
+    throw new apiError(400,"avtar while uploding on avtar file")
+  }
+
+   const user =   await User.findByIdAndUpdate(
+  req.user?._id,
+  {
+    $set:{
+    coverimg:coverimg.url
+    }
+  },
+  {new:true}
+).select("-password")
+
+
+return res
+.status(200)
+.json( new apiResponse( 200,user,"cover img  successfully"))
+
+})
+
 export {
   userregister,
   userlogin,
   userlogout,
-  RefreshAccessToken
+  RefreshAccessToken,
+  changeCurrentPassword,
+  getCurrentUser,
+  UpdatedAccount,
+  Updateavtar,
+  Updatecoverimg
 }
